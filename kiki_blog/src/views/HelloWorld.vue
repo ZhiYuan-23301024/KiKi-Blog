@@ -37,7 +37,6 @@
         :post="post"
         @view-detail="handleViewDetail"
       />
-      <post-card :post="{title:'lalallalalal'}"/>
       <div class="pagination">
     <button 
       @click="changePage(currentPage - 1)"
@@ -62,26 +61,10 @@ import axios from 'axios'
 export default {
   data(){
     return{
-      posts:[
-        {
-          title:"1"
-        },
-        {
-          title:"1"
-        }, 
-        {
-          title:"1"
-        }, 
-        {
-          title:"1"
-        }, 
-        {
-          title:"1"
-        }
-      ],
+      posts:[],
       test_posts:[],
       currentPage:1,
-      totalPages:2,
+      totalPages:1,
       loading: false
     }
   },
@@ -92,7 +75,6 @@ export default {
     console.log("当前页码",this.currentPage)
     this.fetchPosts()
   },
-  
   methods: {
 
     //查看博客内容
@@ -107,11 +89,12 @@ export default {
       this.loading=true
       try {
         const response = await axios.get(
-                `http://localhost:8081/helloworld`,
+                `http://localhost:8081/postcardlist`,
                 { params: { currentpage: this.currentPage } } // 参数规范写法
             )
-        this.posts = response.data.postCardList
-        this.totalPages=response.data.pageNum
+        this.posts = response.data.data.postcardlist
+        this.totalPages=response.data.data.pageNum
+        console.log(this.posts)
       } catch (error) {
         console.error('获取数据失败:', error)
       }finally{
